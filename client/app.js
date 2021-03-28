@@ -1,7 +1,7 @@
 ////////// Canvas area where you can draw ////////// 
 
 // make connetion to the server
-var socket = io.connect('http://localhost:5000');
+var socket = io.connect('https://jupiter-doodle-board.herokuapp.com/');
 socket.on('canvas-data', (data) => {
     console.log("new drawing")
     ctx.beginPath();
