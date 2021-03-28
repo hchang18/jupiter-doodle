@@ -1,4 +1,16 @@
 ////////// Canvas area where you can draw ////////// 
+
+// make connetion to the server
+var socket = io.connect('http://localhost:5000');
+socket.on('canvas-data', (data) => {
+    console.log("new drawing")
+    ctx.beginPath();
+    ctx.moveTo(data.last_x, data.last_y);
+    ctx.lineTo(data.curr_x, data.curr_y);
+    ctx.stroke();
+
+})
+
 // Set up the canvas
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
@@ -30,15 +42,30 @@ canvas.addEventListener("mouseup", function (e) {
     drawing = false;
     // console.log("drawing: ", drawing);
 }, false);
+
 canvas.addEventListener("mousemove", function (e) {
     mousePos = getMousePos(canvas, e);
+    
     ctx.beginPath();
     // console.log("mousemove drawing:", drawing);
     if (drawing && !filling) {
+        
+        console.log('sending: ' + mousePos.x + " , " + mousePos.y);
+
+        var data = {
+            last_x: lastPos.x,
+            last_y: lastPos.y,
+            curr_x: mousePos.x,
+            curr_y: mousePos.y
+        }
+
+        socket.emit('canvas-data', data);
+
         ctx.moveTo(lastPos.x, lastPos.y);
         ctx.lineTo(mousePos.x, mousePos.y);
         ctx.stroke();
         lastPos = mousePos;
+
     }
 }, false);
 
@@ -162,3 +189,15 @@ window.onclick = function (event) {
     modal.style.display = "none";
    }
 }
+
+// listen for events
+// socket.on('canvas-data', (data) => {
+//   var image = new Image();
+//   var canvas = document.querySelector(".jsCanvas");
+//   var ctx = canvas.getContext('2d');
+//   image.onload = () => {
+//     ctx.drawImage(image, 0, 0);
+//   };
+//   image.src = data;
+
+// })
