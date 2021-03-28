@@ -10,7 +10,7 @@ const server = app.listen(server_port, () => {
 });
 
 
-app.use(express.static('../'));
+app.use(express.static('client'));
 
 var io = socket(server);
 
