@@ -1,8 +1,8 @@
 ////////// Canvas area where you can draw ////////// 
 
 // make connetion to the server
-// var socket = io.connect('https://jupiter-doodle-board.herokuapp.com/');
-var socket = io.connect('http://localhost:5000');
+var socket = io.connect('https://jupiter-doodle-board.herokuapp.com/');
+// var socket = io.connect('http://localhost:5000');
 socket.on('canvas-data', (data) => {
     console.log("new drawing");
 
@@ -25,8 +25,9 @@ canvas.width = CANVAS_SIZE;
 canvas.height = CANVAS_SIZE;
 
 const INITIAL_COLOR = "#2c2c2c"
+const BACKGROUND_COLOR = "white";
 
-ctx.fillStyle = "white";
+ctx.fillStyle = BACKGROUND_COLOR;
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.strokeStyle = INITIAL_COLOR;
 // ctx.fillStyle = INITIAL_COLOR;
@@ -140,7 +141,8 @@ Array.from(colors).forEach(color =>
     color.addEventListener("click", function (event) { 
         const color = event.target.style.backgroundColor;
         ctx.strokeStyle = color;
-        ctx.fillStyle = color; 
+        ctx.fillStyle = color;
+        ctx.lineWidth = 2.5;
     })
 );
 
@@ -158,6 +160,7 @@ drawMode.addEventListener("click", (event) => {
 fillMode.addEventListener("click", (event) => { 
     ctx.fillRect(0, 0, canvas.width, canvas.height); 
 });
+
 
 eraseMode.addEventListener("click", (event) => {
     ctx.strokeStyle = "#ffffff";
@@ -184,17 +187,30 @@ newBtn.addEventListener("click", (event) => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 });
 
-const wordBtn = document.getElementById("jsWord");
-const modal = document.getElementById("modal");
+// Get the modal
+var modal = document.getElementById("myModal");
 
-wordBtn.addEventListener("click", (event) => {
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
   modal.style.display = "block";
-});
+}
 
-window.onclick = function (event) {
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
-   }
+  }
 }
 
 // listen for events

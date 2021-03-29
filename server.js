@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
 
     // if server receives some message, broadcast it
     socket.on('canvas-data', (data) => {
-        console.log(data);
+        // console.log(data);
         socket.broadcast.emit('canvas-data', data);
         // io.sockets.emit('canvas-data', data);
     });
