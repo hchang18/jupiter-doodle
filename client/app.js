@@ -1,9 +1,14 @@
 ////////// Canvas area where you can draw ////////// 
 
 // make connetion to the server
-var socket = io.connect('https://jupiter-doodle-board.herokuapp.com/');
+// var socket = io.connect('https://jupiter-doodle-board.herokuapp.com/');
+var socket = io.connect('http://localhost:5000');
 socket.on('canvas-data', (data) => {
-    console.log("new drawing")
+    console.log("new drawing");
+
+    ctx.strokeStyle = data.stroke_style;
+    ctx.lineWidth = data.line_width;
+
     ctx.beginPath();
     ctx.moveTo(data.last_x, data.last_y);
     ctx.lineTo(data.curr_x, data.curr_y);
@@ -24,7 +29,7 @@ const INITIAL_COLOR = "#2c2c2c"
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.strokeStyle = INITIAL_COLOR;
-ctx.fillStyle = INITIAL_COLOR;
+// ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
 
 
@@ -56,7 +61,9 @@ canvas.addEventListener("mousemove", function (e) {
             last_x: lastPos.x,
             last_y: lastPos.y,
             curr_x: mousePos.x,
-            curr_y: mousePos.y
+            curr_y: mousePos.y,
+            stroke_style: ctx.strokeStyle,
+            line_width: ctx.lineWidth,
         }
 
         socket.emit('canvas-data', data);
