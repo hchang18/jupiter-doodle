@@ -1,8 +1,8 @@
 ////////// Canvas area where you can draw ////////// 
 
 // make connetion to the server
-var socket = io.connect('https://jupiter-doodle-board.herokuapp.com/');
-// var socket = io.connect('http://localhost:5000');
+// var socket = io.connect('https://jupiter-doodle-board.herokuapp.com/');
+var socket = io.connect('http://localhost:5000');
 socket.on('canvas-data', (data) => {
     console.log("new drawing");
 
@@ -14,6 +14,12 @@ socket.on('canvas-data', (data) => {
     ctx.lineTo(data.curr_x, data.curr_y);
     ctx.stroke();
 
+})
+
+socket.on('reset', (data) => {
+    console.log("reset");
+    ctx.fillStyle = data.fill_style;
+    ctx.fillRect(0, 0, data.width, data.height);
 })
 
 // Set up the canvas
@@ -185,6 +191,15 @@ saveBtn.addEventListener("click", (event) => {
 newBtn.addEventListener("click", (event) => {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    var data = {
+        fill_style: ctx.fillStyle,
+        width: canvas.width,
+        height: canvas.height
+    }
+
+    socket.emit('reset', data);
+
 });
 
 // Get the modal
@@ -212,15 +227,3 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
-
-// listen for events
-// socket.on('canvas-data', (data) => {
-//   var image = new Image();
-//   var canvas = document.querySelector(".jsCanvas");
-//   var ctx = canvas.getContext('2d');
-//   image.onload = () => {
-//     ctx.drawImage(image, 0, 0);
-//   };
-//   image.src = data;
-
-// })
