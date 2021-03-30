@@ -1,1 +1,1 @@
-# jupiter-doodle
+# Jupiter Doodle Board
