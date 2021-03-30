@@ -1,1 +1,1 @@
-# Play pictionary
+# Pictionary online
